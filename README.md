@@ -1,107 +1,92 @@
-# TurnBasedRPG-PLUNDERVOLT
+# Pedro-Moraes-Unity-Challenge
 
-Challenge description
+# Turn-based Battle Simulator - Documentation 
 
-Game Developer Challenge
+This README provides an overview of the project, including its core components and how they interact.
+## Table of Contents
+- [Character Information](#character-information)
+- [Skills and Scriptable Objects](#skills-and-scriptable-objects)
+- [Character Turn System](#character-turn-system)
+- [Enemy AI Control](#enemy-ai-control)
+- [Handling Character Death and Game Over](#handling-character-death-and-game-over)
 
-This mini-challenge aims to verify if the game developer candidate understands the programming fundamentals in C# and Unity.
+## Character Information
 
-Challenge
-Deliverables: Document (PDF) and code in GitHub
-Pre-requisites: Programming fundamentals
-Overall
-As a mini-challenge for a mentee game developer position, it aims to identify your work process. In this project, the quality of your deliveries
-is what matters the most. Showing your thought process and building scalable, maintainable, and high-quality code will be the main focus
-for the task.
-Also, you can use this opportunity to grow your portfolio!
-Description
-You will be creating a turn-based RPG combat system. The game can start with a battle scene without real art, where a basic background
-and basic art can represent the characters. For simplicity, it will consist of a team of two characters controlled by the player against two
-enemies, although the code needs to support adding more in the future (scalability).
-As a turn-based RPG, the player will be able to:
-Use a basic attack
-Use a skill
-The UI should only include buttons to select the attack or skills. Since art is not the game's focus, the game should be tested via debugging
-logs. Feel free to do anything on the UI if there is time to implement it.
-Main stats
-The main stats of each character that a player can increase can be found below:
-Strength: It affects basic attack damage.
-Vitality: Increases the max HP of a character.
-Dexterity: Increases the chance of hitting a target
-Agility: Increases the dodge chance
-Intelligence: Increases mana.
-Secondary stats
-There are secondary stats that are calculated directly by the main stats:
-HP: Each point in vitality increases the HP by 2. Each character starts with 5 HP.
-MP (Mana): Each point in intelligence increases the MP by 3. Each character starts with 10 MP.
-Dodge: Used to calculate if an attack/skill is missed. Each point in agility increases the dodge chance by 3%. Each character starts with
-a 5% dodge.
-Hit ratio: Used to calculate if an attack/skill hits. Each point in dexterity increases the hit ratio by 4%. Each character starts with a 20% hit
-ratio.
+In this project, each character possesses the following attributes:
+- **Name:** The character's name.
+- **Stats:** Various statistics that define a character's abilities (Mains stats, Secondary stats and Condition/Buffs stats).
+- **Skills:** A list of customizable skills represented as Scriptable Objects. These skills can be found in the "Scriptable Objects/Skills" directory.
 
-Hit chance
-Each attack and skill has its effect and chance to hit. When using an attack/skill, it is considered a hit using the following formula:
+## Skills and Scriptable Objects
 
-Also, note that effects are not applied if the attack/skill misses.
-On the other hand, some skills are used to buff/heal allies. These do not have a chance to miss!
-Skills
-The skills to be implemented can be found below:
-Basic attack
-Effect: Deals damage equal to the character’s strength
-Chance to hit: 60%
-MP consumed: 0
+Skills in this project are represented as Scriptable Objects, specifically using the `Skill` class. These Scriptable Objects provide a versatile and customizable way to define various character abilities. Below is a breakdown of the key attributes and properties of the `Skill` Scriptable Object:
 
-Fireball
-Effect: Deals damage equal to 2 plus the character’s intelligence. The target has a 30% chance of being BURNED for 3 turns.
-Chance to hit: 60%
-MP consumed: 3
+### General Information
 
-Inferno
-Effect: Hits all enemies. Deals damage equal to intelligence * 2. Targets that are burned take an additional 30% damage.
-Chance to hit: 70%.
-MP consumed: 7
+- **Name:** The name of the skill.
+- **Description:** A brief description of the skill's effect or purpose.
+- **MP Cost:** The amount of mana (MP) required to use the skill.
+- **Hit Chance:** The probability of the skill successfully hitting its target.
+- **Target Selection:** Skills can target enemies or allies, depending on the `TargetEnemies` property, if targets an ally it will always hit.
+- **Area Attack:** Indicates whether the skill affects all targets or just a single target.
 
-BURNED (Condition)
-Effect: The character loses two hp at the start of their turn.
+### Skill Power
 
-Heal
-Effect: Heal an ally for 2 * intelligence.
-Chance to hit: -.
-MP consumed: 4
+- **Base Power:** The base power of the skill, influencing its damage or effect potency.
+- **Scale Type:** Determines how additional factors affect the skill's power. Options include:
+  - `NoScale`: No additional scaling.
+  - `AddIntToPower`: Add power based on the intelligence of the caster.
+  - `MultIntToPower`: Multiply the power based to the intelligence of the caster.
+  - `AddStrToPower`: Add power based to the strenght of the caster.
 
-Continuous healing
-Effect: Apply continuous healing where the target heals HP at the start of its turn. This effect lasts three turns and the amount healed equals
-the skill’s user intelligence. The target immediately heals 3 HP after receiving the healing.
-Chance to hit: -.
-MP consumed: 6
-1 Hit = (Attack/skill)ChanceToHit + AllyHitRatio - EnemyDodgeChance
+### Continuous Healing Buff
 
-Tasks
-The following items are mandatory for the delivery of this challenge:
-1. Document the processes you are using for building the system.
-a. This is a PDF file that may contain text, flowcharts, etc.
-2. Implement the battle skill system according to this task’s description.
-a. Two characters controlled by the player
-i. Character 1 has the following skills:
-1. Fireball
-2. Inferno
-ii. Character 2 has the following skills:
-1. Heal
-2. Continuous healing
-b. Two enemies
-i. Skills can be the same as the player’s character.
-ii. The enemies can have a simple AI to choose what their action is.
-1. Randomly choose the action.
-c. When a character falls to 0 HP or below it, it will be permanently removed from battle.
-d. Skills can’t be used if the user does not have enough MP to use it.
-What Plundervolt expects
-Plundervolt will review and analyze the following items (in order of priority):
-1. Code Quality
-a. Scalability
-b. Maintainability
-2. Code architecture
-a. Turn-system
-b. Usage of design patterns
-3. Documentation
-a. Thought process
-b. Code comments
+- **Continuous Healing Chance:** The probability of the skill applying continuous healing buff.
+- **Continuous Healing Potency:** The strength or effectiveness of the continuous healing.
+- **Continuous Healing Scale Type:** Similar to the skill power, this determines how it scales with the buff.
+- **Continuous Healing Duration:** The duration for which the continuous healing effect lasts.
+
+### Burned Condition
+
+- **Burn Chance:** The likelihood of the skill inflicting a "burned" condition on the target.
+- **Burn Duration:** The duration of the "burned" condition.
+- **Extra Percentage at Burned Targets:** Percentage damage or effect potency applied to targets with the "burned" condition.
+
+These properties allow you to create a wide variety of skills with different effects, such as offensive attacks, healing spells, and status-inflicting abilities. Customization and balancing of skills can be done by adjusting these attributes within the Scriptable Object.
+
+## Character Turn System
+
+The character turn system is a crucial part of the project, and it works as follows:
+
+### Controlling Character Turns
+
+- Characters take turns in the battle, and this system is managed by the `BattleSystem.cs`.
+- The `InitBattle()` function initializes the battle, and the `SetCharacterTurn()` function controls the order of character turns.
+- The `SetCharacterTurn()` function also handles enemy AI and calls `EnableEnemyAI()` to initiate their actions.
+- Additionally, this function triggers `CheckConditionsAndDisplayStatus()` to evaluate conditions and buffs on all characters.
+
+### Choosing Skills and Targets
+
+- At the beginning of each turn, characters must choose their actions.
+- The `DisplaySkills()` function displays available skills, allowing characters to select one.
+- The `SelectSkill()` function is responsible for skill selection.
+- After choosing a skill, the `DisplayTargetsSelection()` function presents targets, and the `AttackCharacterList()` function processes the selected targets.
+- Finally, `SkillManager.UseSkillAtTarget()` is called for each target, and the attack status is displayed before moving to the next character's turn.
+
+## Enemy AI Control
+
+Enemy AI in this project is managed by the `EnemyController`. Here's how it operates:
+
+- The `EnableEnemyAI()` function starts controlling the enemy character whose turn it currently is.
+- The AI selects a random skill using `ChooseMove()` (or basic attack if no mana is available).
+- It then picks a random target using `ChooseTarget()`.
+
+## Handling Character Death and Game Over
+
+Character survival and game over scenarios are managed as follows:
+
+- Whenever a character takes damage, `CheckCharacterDeath()` is called to check if the character is still alive.
+- If a character dies, they are removed from the character list.
+- If there are no characters left in either the allies or enemies list, the game calls `Gameover()`.
+- `Gameover()` disables any running AI and displays the game over screen.
+

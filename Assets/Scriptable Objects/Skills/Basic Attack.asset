@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890f7487d3a4be24cbb5ef258ffa0e77, type: 3}
+  m_Name: Basic Attack
+  m_EditorClassIdentifier: 
+  skillName: Basic Attack
+  description: "Deals damage equal to the character\u2019s strength "
+  mpCost: 0
+  hitChance: 60
+  targetEnemies: 1
+  areaAttack: 0
+  basePower: 0
+  scaleType: 3
+  contHealChance: 0
+  contHealPotency: 0
+  contHealScaleType: 0
+  contHealDuration: 0
+  burnChance: 0
+  burnDuration: 0
+  extraPercentageAtBurnTargets: 0
